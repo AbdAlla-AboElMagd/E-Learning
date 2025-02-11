@@ -6,6 +6,7 @@ import { Container, Box, Typography, Pagination } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
+
 function CoursesList() {
   let total_fav = useSelector((state) => state.favCourses.totalFav);
   const API_URL = "https://retoolapi.dev/3apaeZ/data";
@@ -60,5 +61,6 @@ function CoursesList() {
     </Container>
   );
 }
+
 
 export default CoursesList;
