@@ -9,6 +9,7 @@ function App() {
     <div className="">
       <BrowserRouter>
         <Switch>
+          
           <Route path="/" component={Login} exact />
           <Route path="/E-Learning" component={Login} exact />
 
