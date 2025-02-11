@@ -9,7 +9,10 @@ import { Link as muiLink } from "@mui/material/Link";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../Redux/Actions/authAction";
 
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
 function Login() {
+  const history = useHistory();
   const user = useSelector((state) => state.auth.user);
   const loggedin = useSelector((state) => state.auth.loggedin);
   const dispatch = useDispatch();
@@ -91,6 +94,7 @@ function Login() {
       console.log("uname", loginByUname(email));
       if (loginByUname(email) || loginByEmail(email)) {
         setLoginError(false);
+        history.push("/E-Learning");
       } else {
         setLoginError(true);
       }
