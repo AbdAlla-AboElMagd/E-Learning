@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import { Link } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -16,8 +15,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-//import ListItemText  from "@mui/material";
 import ListItemText from '@mui/material/ListItemText';
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 
@@ -31,10 +31,14 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import { LocalDrinkOutlined } from '@mui/icons-material';
 
 //component
+import AdminPanel from './../AdminPanel'
+import Login from '../../Pages/Login';
+import Unauthorized from './../pages/Unauthorized';
 
 
 
 const drawerWidth = 240;  
+
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme }) => ({
@@ -96,7 +100,16 @@ export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
 
 
+let user = useSelector((state) => state.auth.user);
+let isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+const dispatch = useDispatch();
+const history = useHistory();
+
+const handleLogout = () => {
+  dispatch(isLoggedIn);
+  history.push("/E-Learning/login"); 
+};
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -105,6 +118,8 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+ 
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -126,7 +141,8 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Admin Panel
+            
+            web site
           </Typography>
         </Toolbar>
       </AppBar>
@@ -151,7 +167,7 @@ export default function PersistentDrawerLeft() {
 
         <Typography variant="h6" sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <DashboardIcon sx={{ mr: 1 , ml: 2}} />
-        Dashboard 
+        Profile 
        </Typography>
 
         <Divider sx={{ mb: 2 }}/>
@@ -161,29 +177,45 @@ export default function PersistentDrawerLeft() {
         Courses 
        </Typography>
 
-       <List>
+      
+
+    <List>
       <ListItem>
-        <ListItemButton component={Link} to="/E-Learning/dashboard/courses/addcourse">
+        <ListItemButton component={Link} to="/E-Learning/userProfile">
           <ListItemIcon>
             <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
           </ListItemIcon>
-          <ListItemText primary="Add Course" />
+          <ListItemText primary=" Your Profile" />
         </ListItemButton>
       </ListItem>
     </List>
 
     <List>
       <ListItem>
-        <ListItemButton component={Link} to="/E-Learning/dashboard/courses/listcourses">
+        <ListItemButton component={Link} to="/E-Learning/login">
           <ListItemIcon>
             <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
           </ListItemIcon>
-          <ListItemText primary="List Course" />
+          <ListItemText primary="Login " />
+        </ListItemButton>
+      </ListItem>
+    </List>
+
+    <List>
+      <ListItem>
+        <ListItemButton  onClick={handleLogout}>
+          <ListItemIcon>
+            <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
+          </ListItemIcon>
+          <ListItemText primary="Logout " />
         </ListItemButton>
       </ListItem>
     </List>
 
       </Drawer>
+      {isLoggedIn && user.role === "admin" ? <AdminPanel />: < Unauthorized/>}
+
+
       <Main open={open}>
         {/* <DrawerHeader /> */}
       </Main>

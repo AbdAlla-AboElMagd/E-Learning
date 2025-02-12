@@ -10,14 +10,15 @@ import UpdateCourse from "./adminpanel/api/UpdateCourse";
 import CoursesList from './CoursesList';
 import CourseDetails from './CourseDetails';
 import GetAllFavoriteCourses from "./Pages/GetAllFavoriteCourses";
+import Navbar from "./adminpanel/components/Navbar";
+import UserProfile from "./adminpanel/pages/UserProfile"
 
 
 function App() {
   return (
     <div className="">
-
       <BrowserRouter>
-      
+      <Navbar/>
         <Switch>
         <Route path="/E-Learning" component= {CoursesList} exact/>
         <Route path="/" component= {CoursesList} exact/>
@@ -30,6 +31,8 @@ function App() {
           <Route path="/E-Learning/register" component={Register} exact />
           <Route path="/register" component={Register} exact />
 
+          
+          <Route path="/E-Learning/userProfile" component={UserProfile} exact />
 
           <Route path="/E-Learning/dashboard" component={AdminPanel} exact/>
           <Route path="/E-Learning/dashboard/courses/addcourse"component={AddCourse}exact/>
