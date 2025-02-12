@@ -1,7 +1,7 @@
 import "./App.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 import AdminPanel from './adminpanel/AdminPanel'
 import AddCourse from "./adminpanel/api/AddCourse";
 import ListCourses from "./adminpanel/api/ListCourses";
