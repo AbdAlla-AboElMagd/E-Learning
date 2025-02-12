@@ -94,7 +94,8 @@ function Login() {
       console.log("uname", loginByUname(email));
       if (loginByUname(email) || loginByEmail(email)) {
         setLoginError(false);
-        history.push("/E-Learning");
+
+      history.push("/E-Learning");
       } else {
         setLoginError(true);
       }
