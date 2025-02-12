@@ -1,16 +1,23 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import CoursesList from './CoursesList';
-import CourseDetails from './CourseDetails';
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import AdminPanel from './adminpanel/AdminPanel'
+import AddCourse from "./adminpanel/api/AddCourse";
+import ListCourses from "./adminpanel/api/ListCourses";
+import NotFound from './adminpanel/pages/NotFound';
+import UpdateCourse from "./adminpanel/api/UpdateCourse";
+import CoursesList from './CoursesList';
+import CourseDetails from './CourseDetails';
 import GetAllFavoriteCourses from "./Pages/GetAllFavoriteCourses";
 
 
 function App() {
   return (
     <div className="">
+
       <BrowserRouter>
+      
         <Switch>
         <Route path="/E-Learning" component= {CoursesList} exact/>
         <Route path="/" component= {CoursesList} exact/>
@@ -23,12 +30,18 @@ function App() {
           <Route path="/E-Learning/register" component={Register} exact />
           <Route path="/register" component={Register} exact />
 
+
+          <Route path="/E-Learning/dashboard" component={AdminPanel} exact/>
+          <Route path="/E-Learning/dashboard/courses/addcourse"component={AddCourse}exact/>
+          <Route path="/E-Learning/dashboard/courses/listcourses"component={ListCourses}exact/>
+          <Route path="/E-Learning/dashboard/courses/updatecourses/:courseId"component={UpdateCourse}exact/>
+
           <Route path="/FavCourses" component={GetAllFavoriteCourses} exact />
           <Route path="/E-Learning/FavCourses" component={GetAllFavoriteCourses} exact />
+          <Route path="*" component={NotFound} />
 
 
           
-          <Route path="*" component={Login} />
         </Switch>
       </BrowserRouter>
     </div>
