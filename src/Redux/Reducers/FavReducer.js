@@ -22,6 +22,8 @@ export default function favReducer(state = INIT_VALUES, action) {
         favCourses: courses,
         totalFav: state.totalFav >= 0 ? state.totalFav - 1 : 0,
       };
+    case "Reset":
+      return INIT_VALUES;
     default:
       return state;
   }

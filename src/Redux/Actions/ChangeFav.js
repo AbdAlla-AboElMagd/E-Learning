@@ -11,3 +11,9 @@ export const DelFav = (payload) => {
     payload,
   };
 };
+
+export const Reset = () => {
+  return {
+    type: "Reset",
+  };
+};

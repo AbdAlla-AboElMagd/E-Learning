@@ -21,3 +21,14 @@
 //     ? dispatch(AddFav(myPayload))
 //     : dispatch(DelFav(myPayload));
 // };
+
+// -------------------------------------------------------------------------------
+// Logout
+// import { Reset } from "../Redux/Actions/ChangeFav";
+// import { login, logout } from "../Redux/Actions/Logout";
+// import { useDispatch } from "react-redux";
+
+// const dispatch = useDispatch();
+// dispatch(Reset());
+// dispatch(logout());
+// -------------------------------------------------------------------------------
