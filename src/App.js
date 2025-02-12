@@ -7,18 +7,22 @@ import AddCourse from "./adminpanel/api/AddCourse";
 import ListCourses from "./adminpanel/api/ListCourses";
 import NotFound from './adminpanel/pages/NotFound';
 import UpdateCourse from "./adminpanel/api/UpdateCourse";
+import CoursesList from './CoursesList';
+import CourseDetails from './CourseDetails';
+import GetAllFavoriteCourses from "./Pages/GetAllFavoriteCourses";
+
 
 function App() {
   return (
     <div className="">
-      
+
       <BrowserRouter>
-      <AdminPanel/>
-
+      
         <Switch>
-
-          <Route path="/" component={Login} exact />
-          <Route path="/E-Learning" component={AdminPanel} exact />
+        <Route path="/E-Learning" component= {CoursesList} exact/>
+        <Route path="/" component= {CoursesList} exact/>
+        <Route path="/course-details/:id" component= {CourseDetails} exact/>
+        
 
           <Route path="/login" component={Login} exact />
           <Route path="/E-Learning/login" component={Login} exact />
@@ -32,7 +36,12 @@ function App() {
           <Route path="/E-Learning/dashboard/courses/listcourses"component={ListCourses}exact/>
           <Route path="/E-Learning/dashboard/courses/updatecourses/:courseId"component={UpdateCourse}exact/>
 
+          <Route path="/FavCourses" component={GetAllFavoriteCourses} exact />
+          <Route path="/E-Learning/FavCourses" component={GetAllFavoriteCourses} exact />
           <Route path="*" component={NotFound} />
+
+
+          
         </Switch>
       </BrowserRouter>
     </div>
