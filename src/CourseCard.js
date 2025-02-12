@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddFav, DelFav } from "./Redux/Actions/ChangeFav";
 
 function CourseCard({ course }) {
-    console.log(course)
     const history = useHistory();
     const [isFavorite, setIsFavorite] = useState(false);
     let favCourses = useSelector((state) => state.favCourses.favCourses);

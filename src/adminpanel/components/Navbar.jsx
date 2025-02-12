@@ -19,7 +19,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from 'react-redux';
-
+import { Reset } from "../../Redux/Actions/ChangeFav";
+import { login, logout } from "../../Redux/Actions/authAction";
 
 
 //icons
@@ -107,9 +108,15 @@ const dispatch = useDispatch();
 const history = useHistory();
 
 const handleLogout = () => {
-  dispatch(isLoggedIn);
-  history.push("/E-Learning/login"); 
+  dispatch(Reset());
+  dispatch(logout()); 
+   history.push("/E-Learning/login"); 
 };
+
+
+// const dispatch = useDispatch();
+// dispatch(Reset());
+// dispatch(logout());
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -189,6 +196,17 @@ const handleLogout = () => {
         </ListItemButton>
       </ListItem>
     </List>
+{
+  isLoggedIn? (<List>
+    <ListItem>
+      <ListItemButton  onClick={handleLogout}>
+        <ListItemIcon>
+          <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
+        </ListItemIcon>
+        <ListItemText primary="Logout " />
+      </ListItemButton>
+    </ListItem>
+  </List>):(
 
     <List>
       <ListItem>
@@ -200,20 +218,12 @@ const handleLogout = () => {
         </ListItemButton>
       </ListItem>
     </List>
+    )}
 
-    <List>
-      <ListItem>
-        <ListItemButton  onClick={handleLogout}>
-          <ListItemIcon>
-            <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
-          </ListItemIcon>
-          <ListItemText primary="Logout " />
-        </ListItemButton>
-      </ListItem>
-    </List>
+    
 
       </Drawer>
-      {isLoggedIn && user.role === "admin" ? <AdminPanel />: < Unauthorized/>}
+      {isLoggedIn && user.role === "admin" ? <AdminPanel />:null}
 
 
       <Main open={open}>

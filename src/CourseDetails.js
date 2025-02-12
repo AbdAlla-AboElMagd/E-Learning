@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container,Typography,Box,Button,Alert,Paper,Grid,Avatar,} from "@mui/material";
+import { Container, Typography, Box, Button, Alert, Paper, Grid, Avatar, } from "@mui/material";
 import Rating from "@mui/material/Rating";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function CourseDetails() {
+    const user = useSelector((state) => state.auth.user);
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const API_URL = "https://retoolapi.dev/3apaeZ/data";
+    const POST_URL = "https://api-generator.retool.com/QpLwM6/data";
+    const ENROLL_URL = "https://api-generator.retool.com/QpLwM6/data?username=";
     const { id } = useParams();
+    const history = useHistory()
     const [course, setCourse] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -20,20 +26,64 @@ function CourseDetails() {
         try {
             const response = await axios.get(`${API_URL}/${id}`);
             setCourse(response.data);
+            checkEnrolled(user.username, id)
+
         } catch (error) {
             console.error("Error fetching course details:", error);
         }
     };
 
+    const PostEnrolled = async (username, id) => {
+            const data = {
+                username: username,
+                course_id: id
+            };
+            try {
+                const response = await axios.post('https://api-generator.retool.com/QpLwM6/data', data, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log('Response:', response.data);
+            } catch (error) {
+                console.error('Error posting data:', error);
+            }
+        
+    };
+
+    const checkEnrolled = async (username, id) => {
+        if (isLoggedIn) {
+            try {
+                const response = await axios.get(`${ENROLL_URL}${username}`);
+                const EnrolledCourses = response.data.some(course => course.course_id == id);
+                setIsEnrolled(EnrolledCourses)
+            }
+
+            catch (error) {
+                console.error("Error fetching course details:", error);
+            }
+        };
+    }
+
+
+
+
     const handleEnroll = () => {
         if (!isLoggedIn) {
             setMessage("Please login to enroll in this course.");
+            history.push("/E-Learning/login")
+        
             return;
         }
         if (!isEnrolled) {
             setIsEnrolled(true);
+            PostEnrolled(user.username, course.id)
             setMessage("You're successfully enrolled in this course!");
+        
+
         }
+        
+
     };
 
     if (!course) {

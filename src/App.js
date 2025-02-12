@@ -17,6 +17,7 @@ import UserProfile from "./adminpanel/pages/UserProfile"
 function App() {
   return (
     <div className="">
+
       <BrowserRouter>
       <Navbar/>
         <Switch>
