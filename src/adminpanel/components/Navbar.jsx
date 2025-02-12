@@ -129,7 +129,7 @@ const handleLogout = () => {
  
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' , mb:"2"}}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
