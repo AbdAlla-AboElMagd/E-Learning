@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Card from './../components/Card';
 import Tablee from "../components/Table";
+import Search from "../components/Search";
+
 
 function ListCourses() {
     const [courses, setCourses] = useState([]);
@@ -16,6 +17,7 @@ function ListCourses() {
     return (
         <div>
             {errors && <p style={{ color: "red" }}>Error: {errors}</p>}
+            <Search/>
          
                 <Tablee courses={courses} />
     {/* id

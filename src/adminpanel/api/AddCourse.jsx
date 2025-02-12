@@ -1,50 +1,68 @@
-import { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import axios from "axios";
-import { TextField, Button, Container, Typography, Box, Snackbar, Alert } from "@mui/material";
+import React, { useState } from 'react';
+import axios from 'axios';
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Alert,
+  Snackbar,
+  Box,
+} from '@mui/material';
 
-const EditCourse = () => {
-  const { courseId } = useParams();
-  const history = useHistory();
+const AddCourse = () => {
   const [courseData, setCourseData] = useState({
     course_name: "",
-    course_description: "",
-    instructor: "",
     course_image: "",
     price: "",
+    course_description: "",
+    instructor: "",
   });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  useEffect(() => {
-    axios.get(` https://api-generator.retool.com/L5z0NU/courses/${courseId}`)
-      .then((response) => setCourseData(response.data))
-      .catch((error) => console.error("Error fetching course data:", error));
-  }, [courseId]);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Use snackbar instead of Alert
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCourseData((prevData) => ({ ...prevData, [name]: value }));
+    setCourseData({ ...courseData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.put(`https://api-generator.retool.com/L5z0NU/courses/${courseId}`, courseData, {
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => {
-        setSuccessMessage("Course updated successfully!");
-        setOpenSnackbar(true);
-        setTimeout(() => history.push("/E-Learning/dashboard/courses/listcourses"), 1000);
-      })
-      .catch((error) => {
-        setErrorMessage("Error updating course");
-        setOpenSnackbar(true);
+
+    try {
+      const response = await axios.post('https://api-generator.retool.com/L5z0NU/courses', courseData); // Replace with your API endpoint
+      console.log('Course created:', response.data);
+
+      setSuccessMessage('Course added successfully!');
+      setErrorMessage('');
+      setOpenSnackbar(true);
+
+      // Clear the form
+      setCourseData({
+        course_name: "",
+        course_image: "",
+        price: "",
+        course_description: "",
+        instructor: "",
       });
+    } catch (error) {
+      console.error('Error creating course:', error);
+      setErrorMessage(
+        error.response?.data?.message ||
+          error.message ||
+          'An error occurred while adding the course.'
+      );
+      setSuccessMessage('');
+      setOpenSnackbar(true);
+    }
   };
 
-  const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
     setOpenSnackbar(false);
   };
 
@@ -52,7 +70,7 @@ const EditCourse = () => {
     <Container maxWidth="md">
       <Box mt={4} mb={4}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Edit Course
+          Add a New Course
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -85,14 +103,17 @@ const EditCourse = () => {
             margin="normal"
             required
           />
-          <TextField
+            <TextField
             name="course_image"
+            value={courseData.course_image}
             onChange={handleChange}
             fullWidth
             margin="normal"
             required
-            type="file"
+            type="file" // Input type for URLs
+            
           />
+
           <TextField
             label="Price"
             name="price"
@@ -101,14 +122,17 @@ const EditCourse = () => {
             fullWidth
             margin="normal"
             required
-            type="number"
-            InputProps={{ inputProps: { min: 0 } }}
+            type="number" 
+            InputProps={{ inputProps: { min: 0 } }} 
           />
+          
+
           <Button variant="contained" color="primary" type="submit">
-            Save Changes
+            Add Course
           </Button>
         </form>
       </Box>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
@@ -130,4 +154,4 @@ const EditCourse = () => {
   );
 };
 
-export default EditCourse;
+export default AddCourse;

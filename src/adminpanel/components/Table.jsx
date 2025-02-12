@@ -19,6 +19,13 @@ import UpdateIcon from "@mui/icons-material/Update";
 import {Snackbar,Alert} from "@mui/material";
 import UpdateCourse from "../api/UpdateCourse";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
+
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -50,6 +57,9 @@ export default function Tablee() {
   const [courses, setCourses] = useState([]);
   const [errors, setErrors] = useState(null);
   const [refresh, setRefresh] = useState(false);
+
+
+  
 
 
   const handleChangePage = (event, newPage) => {
@@ -103,7 +113,7 @@ export default function Tablee() {
         <ListCourses/>
     }
   };
-
+  
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -178,11 +188,13 @@ export default function Tablee() {
                           variant="outlined"
                           color="success"
                           startIcon={<UpdateIcon />}
-                          onClick={() => <UpdateCourse />}
                           sx={{ m: 1 }}
+                          component={Link}
+                          to={`/E-Learning/dashboard/courses/updatecourses/${course.id}`}
+ 
                         >
-                          Update
-                        </Button>
+                        Update
+                       </Button>
                       </TableCell>
                     </TableRow>
                   ))
