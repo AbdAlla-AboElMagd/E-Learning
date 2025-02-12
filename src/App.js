@@ -31,18 +31,19 @@ function App() {
 
           <Route path="/E-Learning/userProfile" component={UserProfile} exact />
 
+          <Route path="/E-Learning/admin" component={AdminPanel} exact />
           <Route
-            path="/E-Learning/dashboard/courses/addcourse"
+            path="/E-Learning/admin/addcourse"
             component={AddCourse}
             exact
           />
           <Route
-            path="/E-Learning/dashboard/courses/listcourses"
+            path="/E-Learning/admin/listcourses"
             component={ListCourses}
             exact
           />
           <Route
-            path="/E-Learning/dashboard/courses/updatecourses/:courseId"
+            path="/E-Learning/admin/updatecourses/:courseId"
             component={UpdateCourse}
             exact
           />
