@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Skeleton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
@@ -51,6 +52,7 @@ export default function Tablee() {
   const [courses, setCourses] = React.useState([]);
   const [errors, setErrors] = React.useState(null);
   const [refresh, setRefresh] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -70,10 +72,12 @@ export default function Tablee() {
 
   // Fetch courses from new API
   React.useEffect(() => {
+    setIsLoading(true);
     axios
       .get(API_URL)
       .then((response) => setCourses(response.data))
-      .catch((error) => setErrors(error.message));
+      .catch((error) => setErrors(error.message))
+      .finally(() => setIsLoading(false));
   }, [refresh]);
 
   const handleDelete = () => {
@@ -116,7 +120,34 @@ export default function Tablee() {
                         display: { xs: "none", sm: "none", md: "table-cell" },
                       }),
                       ...(headCell.id === "course_description" && {
-                        display: { xs: "none", sm: "none", md: "none", lg: "table-cell" },
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "none",
+                          lg: "table-cell",
+                        },
+                      }),
+                      ...(headCell.id === "instrc_title" && {
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "none",
+                          lg: "table-cell",
+                        },
+                      }),
+                      ...(headCell.id === "price" && {
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "table-cell",
+                        },
+                      }),
+                      ...(headCell.id === "rating" && {
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "table-cell",
+                        },
                       }),
                     }}
                   >
@@ -126,7 +157,37 @@ export default function Tablee() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses.length > 0 ? (
+              {isLoading ? (
+                <>
+                  <TableRow>
+                    <TableCell colSpan={headCells.length} align="center">
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={40}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={headCells.length} align="center">
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={40}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={headCells.length} align="center">
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={40}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </>
+              ) : courses.length > 0 ? (
                 courses
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((course) => (
@@ -134,11 +195,24 @@ export default function Tablee() {
                       <TableCell>{course.id}</TableCell>
                       <TableCell>{course.course_name}</TableCell>
                       <TableCell>{course.instrc_name}</TableCell>
-                      <TableCell>{course.instrc_title}</TableCell>
+                      <TableCell
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "none",
+                            lg: "table-cell",
+                          },
+                        }}
+                      >
+                        {course.instrc_title}
+                      </TableCell>
 
                       {/* Instructor Image (Hidden on small screens) */}
                       <TableCell
-                        sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
+                        sx={{
+                          display: { xs: "none", sm: "none", md: "table-cell" },
+                        }}
                       >
                         <img
                           src={course.instrc_img}
@@ -147,12 +221,31 @@ export default function Tablee() {
                         />
                       </TableCell>
 
-                      <TableCell>${course.price}</TableCell>
-                      <TableCell>{course.rating} ⭐</TableCell>
+                      <TableCell
+                        sx={{
+                          display: { xs: "none", sm: "none", md: "table-cell" },
+                        }}
+                      >
+                        ${course.price}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          display: { xs: "none", sm: "none", md: "table-cell" },
+                        }}
+                      >
+                        {course.rating} ⭐
+                      </TableCell>
 
                       {/* Course Description (Hidden on small screens) */}
                       <TableCell
-                        sx={{ display: { xs: "none", sm: "none", md: "none", lg: "table-cell" } }}
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "none",
+                            lg: "table-cell",
+                          },
+                        }}
                       >
                         {course.course_description}
                       </TableCell>
@@ -213,7 +306,8 @@ export default function Tablee() {
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this course? This action cannot be undone.
+            Are you sure you want to delete this course? This action cannot be
+            undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -227,8 +321,16 @@ export default function Tablee() {
       </Dialog>
 
       {/* Success Snackbar */}
-      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Course deleted successfully!
         </Alert>
       </Snackbar>

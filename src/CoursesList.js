@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import CourseCard from "./CourseCard";
-import { Container, Box, Typography, Pagination, Slider } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Pagination,
+  Slider,
+  Skeleton,
+} from "@mui/material";
 import { Favorite } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import Search from "./adminpanel/components/Search";
@@ -17,6 +24,7 @@ function CoursesList() {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
   const navigate = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchCourses();
@@ -27,6 +35,7 @@ function CoursesList() {
   }, [courses, priceRange]);
 
   const fetchCourses = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${API_URL}?_page=${page}&_limit=${limit}`
@@ -35,6 +44,8 @@ function CoursesList() {
       setTotalPages(Math.ceil(response.headers["x-total-count"] / limit));
     } catch (error) {
       console.error("Error fetching courses:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,11 +66,6 @@ function CoursesList() {
         Courses
       </Typography>
       <Search />
-      {/* <Typography variant="h5" align="center" gutterBottom>
-        <Link to="/E-Learning/FavCourses" style={{ textDecoration: "none", color: "red" }}>
-          <Favorite /> <span> {total_fav} </span>
-        </Link>
-      </Typography> */}
 
       <Box width={300} margin="auto" mb={3}>
         <Typography align="center" gutterBottom>
@@ -74,17 +80,25 @@ function CoursesList() {
         />
       </Box>
 
-      <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
-        {filteredCourses.length > 0 ? (
-          filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))
-        ) : (
-          <Typography variant="h6" color="textSecondary">
-            No courses found in this price range.
-          </Typography>
-        )}
-      </Box>
+      {isLoading ? (
+        <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+        </Box>
+      ) : (
+        <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
+          {filteredCourses.length > 0 ? (
+            filteredCourses.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))
+          ) : (
+            <Typography variant="h6" color="textSecondary">
+              No courses found in this price range.
+            </Typography>
+          )}
+        </Box>
+      )}
       <Pagination
         count={totalPages}
         page={page}
