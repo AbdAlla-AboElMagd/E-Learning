@@ -5,13 +5,14 @@ import CourseCard from "./CourseCard";
 import { Container, Box, Typography, Pagination, Slider } from "@mui/material";
 import { Favorite } from "@mui/icons-material";
 import { useSelector } from "react-redux";
+import Search from "./adminpanel/components/Search";
 
 function CoursesList() {
   let total_fav = useSelector((state) => state.favCourses.totalFav);
   const API_URL = "https://retoolapi.dev/3apaeZ/data";
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 100]); 
+  const [priceRange, setPriceRange] = useState([0, 100]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
@@ -27,7 +28,9 @@ function CoursesList() {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get(`${API_URL}?_page=${page}&_limit=${limit}`);
+      const response = await axios.get(
+        `${API_URL}?_page=${page}&_limit=${limit}`
+      );
       setCourses(response.data);
       setTotalPages(Math.ceil(response.headers["x-total-count"] / limit));
     } catch (error) {
@@ -51,6 +54,7 @@ function CoursesList() {
       <Typography variant="h4" align="center" gutterBottom>
         Courses
       </Typography>
+      <Search />
       {/* <Typography variant="h5" align="center" gutterBottom>
         <Link to="/E-Learning/FavCourses" style={{ textDecoration: "none", color: "red" }}>
           <Favorite /> <span> {total_fav} </span>
@@ -58,7 +62,9 @@ function CoursesList() {
       </Typography> */}
 
       <Box width={300} margin="auto" mb={3}>
-        <Typography align="center" gutterBottom>Filter by Price</Typography>
+        <Typography align="center" gutterBottom>
+          Filter by Price
+        </Typography>
         <Slider
           value={priceRange}
           onChange={handlePriceChange}
@@ -70,7 +76,9 @@ function CoursesList() {
 
       <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
         {filteredCourses.length > 0 ? (
-          filteredCourses.map((course) => <CourseCard key={course.id} course={course} />)
+          filteredCourses.map((course) => (
+            <CourseCard key={course.id} course={course} />
+          ))
         ) : (
           <Typography variant="h6" color="textSecondary">
             No courses found in this price range.
@@ -89,4 +97,3 @@ function CoursesList() {
 }
 
 export default CoursesList;
-
