@@ -12,13 +12,16 @@ function GetAllFavoriteCourses(props) {
 
   return (
     <Container>
-      <Typography variant="h4" align="center" gutterBottom>
+      {/* <Typography variant="h4" align="center" gutterBottom>
         Favorite Courses
-      </Typography>
+      </Typography> */}
       <Typography variant="h5" align="center" gutterBottom>
         <Link
           to="/E-Learning/FavCourses"
-          style={{ textDecoration: "none", color: "red" }}
+          style={{ textDecoration: "none", color: "red" ,  display: "flex", 
+            alignItems: "center", 
+            fontSize: "1.2rem", 
+            fontWeight: "bold" }}
         >
           <Favorite /> <span> {total_fav} </span>
         </Link>

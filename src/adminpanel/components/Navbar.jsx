@@ -35,6 +35,7 @@ import { LocalDrinkOutlined } from '@mui/icons-material';
 import AdminPanel from './../AdminPanel'
 import Login from '../../Pages/Login';
 import Unauthorized from './../pages/Unauthorized';
+import Favorite from './../../Pages/GetAllFavoriteCourses'
 
 
 
@@ -100,6 +101,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  let total_fav = useSelector((state) => state.favCourses.totalFav);
 
 let user = useSelector((state) => state.auth.user);
 let isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -129,7 +131,7 @@ const handleLogout = () => {
  
 
   return (
-    <Box sx={{ display: 'flex' , mb:"2"}}>
+    <Box sx={{ display: 'flex' , margin: '20px'}}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -149,7 +151,7 @@ const handleLogout = () => {
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             
-            web site
+            E-Learinig  ASA
           </Typography>
         </Toolbar>
       </AppBar>
@@ -177,15 +179,9 @@ const handleLogout = () => {
         Profile 
        </Typography>
 
-        <Divider sx={{ mb: 2 }}/>
-
-        <Typography variant="h6" sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-        <CastForEducationIcon sx={{ mr: 1 , ml: 2}}/>
-        Courses 
-       </Typography>
-
-      
-
+        <Divider sx={{ mb: 2 }}/>   
+        { isLoggedIn && (
+           <>
     <List>
       <ListItem>
         <ListItemButton component={Link} to="/E-Learning/userProfile">
@@ -194,6 +190,29 @@ const handleLogout = () => {
           </ListItemIcon>
           <ListItemText primary=" Your Profile" />
         </ListItemButton>
+      </ListItem>
+    </List>
+    <List>
+      <ListItem>
+        <ListItemButton component={Link} to="/E-Learning/FavCourses">
+          <ListItemIcon>
+            <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
+          </ListItemIcon>
+          <ListItemText primary={`Favorite ${total_fav}`} />    
+           </ListItemButton>
+      </ListItem>
+    </List>
+    </>
+  )}
+
+    <List>
+      <ListItem>
+        <ListItemButton component={Link} to="/E-Learning">
+          <ListItemIcon>
+            <AddBoxIcon sx={{ mr: 1, ml: 2 }} />
+          </ListItemIcon>
+          <ListItemText primary="List Courses" />    
+           </ListItemButton>
       </ListItem>
     </List>
 {
@@ -218,8 +237,10 @@ const handleLogout = () => {
         </ListItemButton>
       </ListItem>
     </List>
-    )}
 
+    
+    )}
+  
     
 
       </Drawer>
