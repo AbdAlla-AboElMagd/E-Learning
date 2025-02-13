@@ -12,7 +12,8 @@ import CourseDetails from "./CourseDetails";
 import GetAllFavoriteCourses from "./Pages/GetAllFavoriteCourses";
 import Navbar from "./adminpanel/components/Navbar";
 import UserProfile from "./adminpanel/pages/UserProfile";
-import Footer from './Components/Footer'
+import Footer from "./Components/Footer";
+import Unauthorized from "./adminpanel/pages/Unauthorized";
 
 function App() {
   return (
@@ -60,9 +61,14 @@ function App() {
             component={GetAllFavoriteCourses}
             exact
           />
+          <Route
+            path="/E-Learning/unauthorized"
+            component={Unauthorized}
+            exact
+          />
           <Route path="*" component={NotFound} />
         </Switch>
-        <Footer/>
+        <Footer />
       </BrowserRouter>
     </div>
   );
