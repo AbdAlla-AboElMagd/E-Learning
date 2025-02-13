@@ -5,6 +5,7 @@ import CourseCard from "./CourseCard";
 import { Container, Box, Typography, Pagination } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { useSelector } from "react-redux";
+import Search from "./adminpanel/components/Search";
 
 
 function CoursesList() {
@@ -33,20 +34,19 @@ function CoursesList() {
   };
 
   return (
+
     <Container>
-      <Typography variant="h4" align="center" gutterBottom>
-        Courses
-      </Typography>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Search/>
+      {/* <Typography variant="h5" align="center" gutterBottom>
         <Link
           to="/E-Learning/FavCourses"
           style={{ textDecoration: "none", color: "red" }}
         >
           <Favorite /> <span> {total_fav} </span>
         </Link>
-      </Typography>
+      </Typography> */}
 
-      <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
+      <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3} m={5}  >
         {courses.map((course) => (
           <CourseCard key={course.id} course={course} />
         ))}
