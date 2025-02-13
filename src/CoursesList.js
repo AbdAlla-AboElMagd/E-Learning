@@ -50,7 +50,6 @@ function CoursesList() {
   return (
 
     <Container>
-
       <Search/>
       {/* <Typography variant="h5" align="center" gutterBottom>
         <Link

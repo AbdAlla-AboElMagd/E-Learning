@@ -16,7 +16,7 @@ const AddCourse = () => {
     course_image: "",
     price: "",
     course_description: "",
-    instructor: "",
+    instrc_name: "",
   });
 
   const [successMessage, setSuccessMessage] = useState('');
@@ -31,7 +31,7 @@ const AddCourse = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://api-generator.retool.com/L5z0NU/courses', courseData); // Replace with your API endpoint
+      const response = await axios.post('https://retoolapi.dev/3apaeZ/data/', courseData); // Replace with your API endpoint
       console.log('Course created:', response.data);
 
       setSuccessMessage('Course added successfully!');
@@ -44,7 +44,7 @@ const AddCourse = () => {
         course_image: "",
         price: "",
         course_description: "",
-        instructor: "",
+        instrc_name: "",
       });
     } catch (error) {
       console.error('Error creating course:', error);
@@ -96,8 +96,8 @@ const AddCourse = () => {
           />
           <TextField
             label="Instructor"
-            name="instructor"
-            value={courseData.instructor}
+            name="instrc_name"
+            value={courseData.instrc_name}
             onChange={handleChange}
             fullWidth
             margin="normal"
@@ -110,8 +110,7 @@ const AddCourse = () => {
             fullWidth
             margin="normal"
             required
-            type="file" // Input type for URLs
-            
+            type="text"             
           />
 
           <TextField
