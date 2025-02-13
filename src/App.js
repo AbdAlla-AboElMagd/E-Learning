@@ -22,6 +22,11 @@ function App() {
           <Route path="/E-Learning" component={CoursesList} exact />
           <Route path="/" component={CoursesList} exact />
           <Route path="/course-details/:id" component={CourseDetails} exact />
+          <Route
+            path="/E-Learning/course-details/:id"
+            component={CourseDetails}
+            exact
+          />
 
           <Route path="/login" component={Login} exact />
           <Route path="/E-Learning/login" component={Login} exact />
