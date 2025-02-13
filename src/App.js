@@ -12,6 +12,7 @@ import CourseDetails from "./CourseDetails";
 import GetAllFavoriteCourses from "./Pages/GetAllFavoriteCourses";
 import Navbar from "./adminpanel/components/Navbar";
 import UserProfile from "./adminpanel/pages/UserProfile";
+import Footer from './Components/Footer'
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           />
           <Route path="*" component={NotFound} />
         </Switch>
+        <Footer/>
       </BrowserRouter>
     </div>
   );

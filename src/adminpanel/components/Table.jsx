@@ -1,92 +1,77 @@
 import * as React from "react";
-
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import UpdateIcon from "@mui/icons-material/Update";
-import { Snackbar, Alert } from "@mui/material";
-import UpdateCourse from "../api/UpdateCourse";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
-
-import { useEffect, useState } from "react";
 import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Toolbar,
+  Typography,
+  Paper,
+  FormControlLabel,
+  Switch,
+  Button,
+  Snackbar,
+  Alert,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import UpdateIcon from "@mui/icons-material/Update";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-import ListCourses from "../api/ListCourses";
+const API_URL = "https://retoolapi.dev/3apaeZ/data";
 
 const headCells = [
   { id: "id", label: "ID" },
-  { id: "course_name", label: "Title" },
-  { id: "course_image", label: "Image" },
-  { id: "price", label: "Price" },
-  { id: "instructor", label: "Instructor" },
-  { id: "course_description", label: "Description" },
-  { id: "action", label: "Action" },
+  { id: "course_name", label: "Course Name" },
+  { id: "instrc_name", label: "Instructor" },
+  { id: "instrc_title", label: "Instructor Title" },
+  { id: "instrc_img", label: "Instructor Image" },
+  { id: "price", label: "Price ($)" },
+  { id: "rating", label: "Rating" },
+  { id: "course_description", label: "Course Description" },
+  { id: "action", label: "Actions" },
 ];
 
 export default function Tablee() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [dense, setDense] = React.useState(false);
-  const [open, setOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [selectedId, setSelectedId] = React.useState(null);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [courses, setCourses] = useState([]);
-  const [errors, setErrors] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const [courses, setCourses] = React.useState([]);
+  const [errors, setErrors] = React.useState(null);
+  const [refresh, setRefresh] = React.useState(false);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
+  const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
+  const handleChangeDense = (event) => setDense(event.target.checked);
   const handleOpen = (id) => {
     setSelectedId(id);
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
     setSelectedId(null);
   };
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-  useEffect(() => {
+  // Fetch courses from new API
+  React.useEffect(() => {
     axios
-      .get("https://retoolapi.dev/L5z0NU/courses")
+      .get(API_URL)
       .then((response) => setCourses(response.data))
       .catch((error) => setErrors(error.message));
   }, [refresh]);
@@ -94,7 +79,7 @@ export default function Tablee() {
   const handleDelete = () => {
     if (selectedId) {
       axios
-        .delete(`https://api-generator.retool.com/L5z0NU/courses/${selectedId}`)
+        .delete(`${API_URL}/${selectedId}`)
         .then(() => {
           console.log(`Course ${selectedId} deleted successfully`);
           setCourses((prevCourses) =>
@@ -107,8 +92,6 @@ export default function Tablee() {
           setOpen(false);
           setSelectedId(null);
         });
-
-      <ListCourses />;
     }
   };
 
@@ -116,13 +99,7 @@ export default function Tablee() {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <Toolbar>
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h3"
-            id="tableTitle"
-            component="div"
-            color="info"
-          >
+          <Typography variant="h3" id="tableTitle" sx={{ flex: "1 1 100%" }}>
             Courses
           </Typography>
         </Toolbar>
@@ -135,21 +112,11 @@ export default function Tablee() {
                     key={headCell.id}
                     align="left"
                     sx={{
-                      ...(headCell.id === "course_image" && {
-                        display: {
-                          xs: "none",
-                          sm: "none",
-                          md: "table-cell",
-                          lg: "table-cell",
-                        },
+                      ...(headCell.id === "instrc_img" && {
+                        display: { xs: "none", sm: "none", md: "table-cell" },
                       }),
                       ...(headCell.id === "course_description" && {
-                        display: {
-                          xs: "none",
-                          sm: "none",
-                          md: "none",
-                          lg: "table-cell",
-                        },
+                        display: { xs: "none", sm: "none", md: "none", lg: "table-cell" },
                       }),
                     }}
                   >
@@ -164,43 +131,34 @@ export default function Tablee() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((course) => (
                     <TableRow key={course.id}>
-                      <TableCell align="left">{course.id}</TableCell>
+                      <TableCell>{course.id}</TableCell>
                       <TableCell>{course.course_name}</TableCell>
+                      <TableCell>{course.instrc_name}</TableCell>
+                      <TableCell>{course.instrc_title}</TableCell>
+
+                      {/* Instructor Image (Hidden on small screens) */}
                       <TableCell
-                        align="left"
-                        sx={{
-                          display: {
-                            xs: "none",
-                            sm: "none",
-                            md: "none",
-                            lg: "table-cell",
-                          },
-                        }}
+                        sx={{ display: { xs: "none", sm: "none", md: "table-cell" } }}
                       >
                         <img
-                          src={course.course_image}
-                          alt={course.course_name}
+                          src={course.instrc_img}
+                          alt={course.instrc_name}
                           width="50"
                         />
                       </TableCell>
-                      <TableCell align="left">{course.price}</TableCell>
-                      <TableCell align="left">{course.Insttrctor}</TableCell>
 
+                      <TableCell>${course.price}</TableCell>
+                      <TableCell>{course.rating} ⭐</TableCell>
+
+                      {/* Course Description (Hidden on small screens) */}
                       <TableCell
-                        align="left"
-                        sx={{
-                          display: {
-                            xs: "none",
-                            sm: "none",
-                            md: "none",
-                            lg: "table-cell",
-                          },
-                        }}
+                        sx={{ display: { xs: "none", sm: "none", md: "none", lg: "table-cell" } }}
                       >
                         {course.course_description}
                       </TableCell>
 
-                      <TableCell align="left">
+                      {/* Actions */}
+                      <TableCell>
                         <Button
                           variant="outlined"
                           color="error"
@@ -210,7 +168,6 @@ export default function Tablee() {
                         >
                           Delete
                         </Button>
-
                         <Button
                           variant="outlined"
                           color="success"
@@ -226,7 +183,7 @@ export default function Tablee() {
                   ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={9} align="center">
                     No data available
                   </TableCell>
                 </TableRow>
@@ -234,6 +191,7 @@ export default function Tablee() {
             </TableBody>
           </Table>
         </TableContainer>
+
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -244,6 +202,7 @@ export default function Tablee() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -254,8 +213,7 @@ export default function Tablee() {
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this item? This action cannot be
-            undone.
+            Are you sure you want to delete this course? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -268,16 +226,9 @@ export default function Tablee() {
         </DialogActions>
       </Dialog>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert
-          onClose={handleSnackbarClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
+      {/* Success Snackbar */}
+      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
           Course deleted successfully!
         </Alert>
       </Snackbar>
