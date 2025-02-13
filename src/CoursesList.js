@@ -5,7 +5,6 @@ import CourseCard from "./CourseCard";
 import { Container, Box, Typography, Pagination, Slider } from "@mui/material";
 import { Favorite } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import Search from "./adminpanel/components/Search";
 
 function CoursesList() {
   let total_fav = useSelector((state) => state.favCourses.totalFav);
@@ -48,18 +47,15 @@ function CoursesList() {
   };
 
   return (
-
     <Container>
-      <Search/>
+      <Typography variant="h4" align="center" gutterBottom>
+        Courses
+      </Typography>
       {/* <Typography variant="h5" align="center" gutterBottom>
-        <Link
-          to="/E-Learning/FavCourses"
-          style={{ textDecoration: "none", color: "red" }}
-        
+        <Link to="/E-Learning/FavCourses" style={{ textDecoration: "none", color: "red" }}>
           <Favorite /> <span> {total_fav} </span>
         </Link>
       </Typography> */}
-
 
       <Box width={300} margin="auto" mb={3}>
         <Typography align="center" gutterBottom>Filter by Price</Typography>
@@ -80,12 +76,6 @@ function CoursesList() {
             No courses found in this price range.
           </Typography>
         )}
-  </Box>
-      <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3} m={5}  >
-        {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-
       </Box>
       <Pagination
         count={totalPages}
