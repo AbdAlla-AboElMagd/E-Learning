@@ -1,131 +1,97 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Box,
-  IconButton,
-} from "@mui/material";
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { AddFav, DelFav } from "./Redux/Actions/ChangeFav";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
+import CourseCard from "./CourseCard";
+import { Container, Box, Typography, Pagination, Slider } from "@mui/material";
+import { Favorite } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
-function CourseCard({ course }) {
-  const history = useHistory();
-  const [isFavorite, setIsFavorite] = useState(false);
-  let favCourses = useSelector((state) => state.favCourses.favCourses);
+function CoursesList() {
   let total_fav = useSelector((state) => state.favCourses.totalFav);
-  const dispatch = useDispatch();
+  const API_URL = "https://retoolapi.dev/3apaeZ/data";
+  const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
+  const navigate = useHistory();
 
-  const handleCardClick = () => {
-    history.push(`/E-Learning/course-details/${course.id}`);
+  useEffect(() => {
+    fetchCourses();
+  }, [page]);
+
+  useEffect(() => {
+    filterCourses();
+  }, [courses, priceRange]);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}?_page=${page}&_limit=${limit}`
+      );
+      setCourses(response.data);
+      setTotalPages(Math.ceil(response.headers["x-total-count"] / limit));
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
   };
 
-  function CourseObj(
-    id,
-    course_name,
-    course_description,
-    instrc_name,
-    price,
-    instrc_img
-  ) {
-    return {
-      id: id,
-      course_name: course_name,
-      instrc_img: instrc_img,
-      course_description: course_description,
-      instrc_name: instrc_name,
-      price: price,
-    };
-  }
-  const handleFav = (
-    id,
-    course_name,
-    course_description,
-    instrc_name,
-    price,
-    instrc_img
-  ) => {
-    let myPayload = {};
-    myPayload.id = id;
-    myPayload.data = CourseObj(
-      id,
-      course_name,
-      course_description,
-      instrc_name,
-      price,
-      instrc_img
+  const filterCourses = () => {
+    const filtered = courses.filter(
+      (course) => course.price >= priceRange[0] && course.price <= priceRange[1]
     );
+    setFilteredCourses(filtered);
+  };
 
-    favCourses[id] == undefined
-      ? dispatch(AddFav(myPayload))
-      : dispatch(DelFav(myPayload));
+  const handlePriceChange = (event, newValue) => {
+    setPriceRange(newValue);
   };
-  const toggleFavorite = (event) => {
-    event.stopPropagation();
-    setIsFavorite(!isFavorite);
-    handleFav(
-      course.id,
-      course.course_name,
-      course.course_description,
-      course.instrc_name,
-      course.price,
-      course.instrc_img
-    );
-  };
+
   return (
-    <Card
-      onClick={handleCardClick}
-      style={{ cursor: "pointer", width: 300, position: "relative" }}
-      elevation={3}
-    >
-      <CardMedia
-        component="img"
-        height="140"
-        image={course.instrc_img}
-        alt={course.name}
-      />
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          {course.course_name}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {course.course_description.slice(0, 50)}...
-        </Typography>
-        <Box mt={1}>
-          <Typography variant="body2" color="primary">
-            Instructor: {course.instrc_name}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 2,
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: "#1976D2",
-              color: "white",
-              padding: "6px 12px",
-              borderRadius: "8px",
-              fontWeight: "bold",
-            }}
-          >
-            ${course.price}
-          </Box>
+    <Container>
+      <Typography variant="h4" align="center" gutterBottom>
+        Courses
+      </Typography>
+      {/* <Typography variant="h5" align="center" gutterBottom>
+        <Link to="/E-Learning/FavCourses" style={{ textDecoration: "none", color: "red" }}>
+          <Favorite /> <span> {total_fav} </span>
+        </Link>
+      </Typography> */}
 
-          <IconButton onClick={toggleFavorite} color="error">
-            {favCourses[course.id] ? <Favorite /> : <FavoriteBorder />}
-          </IconButton>
-        </Box>
-      </CardContent>
-    </Card>
+      <Box width={300} margin="auto" mb={3}>
+        <Typography align="center" gutterBottom>
+          Filter by Price
+        </Typography>
+        <Slider
+          value={priceRange}
+          onChange={handlePriceChange}
+          valueLabelDisplay="auto"
+          min={0}
+          max={100}
+        />
+      </Box>
+
+      <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>
+        {filteredCourses.length > 0 ? (
+          filteredCourses.map((course) => (
+            <CourseCard key={course.id} course={course} />
+          ))
+        ) : (
+          <Typography variant="h6" color="textSecondary">
+            No courses found in this price range.
+          </Typography>
+        )}
+      </Box>
+      <Pagination
+        count={totalPages}
+        page={page}
+        onChange={(e, value) => setPage(value)}
+        color="primary"
+        style={{ marginTop: 20, display: "flex", justifyContent: "center" }}
+      />
+    </Container>
   );
 }
 
-export default CourseCard;
+export default CoursesList;
