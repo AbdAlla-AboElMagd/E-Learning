@@ -16,15 +16,15 @@ import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
-import {Snackbar,Alert} from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 import UpdateCourse from "../api/UpdateCourse";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
 
 import { useEffect, useState } from "react";
 import {
@@ -58,10 +58,6 @@ export default function Tablee() {
   const [errors, setErrors] = useState(null);
   const [refresh, setRefresh] = useState(false);
 
-
-  
-
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -89,10 +85,11 @@ export default function Tablee() {
     setSnackbarOpen(false);
   };
   useEffect(() => {
-    axios.get("https://retoolapi.dev/L5z0NU/courses")
-        .then((response) => setCourses(response.data))
-        .catch((error) => setErrors(error.message));
-},  [refresh]);
+    axios
+      .get("https://retoolapi.dev/L5z0NU/courses")
+      .then((response) => setCourses(response.data))
+      .catch((error) => setErrors(error.message));
+  }, [refresh]);
 
   const handleDelete = () => {
     if (selectedId) {
@@ -100,9 +97,10 @@ export default function Tablee() {
         .delete(`https://api-generator.retool.com/L5z0NU/courses/${selectedId}`)
         .then(() => {
           console.log(`Course ${selectedId} deleted successfully`);
-          setCourses(prevCourses => prevCourses.filter(course => course.id !== selectedId));
+          setCourses((prevCourses) =>
+            prevCourses.filter((course) => course.id !== selectedId)
+          );
           setSnackbarOpen(true);
-
         })
         .catch((error) => console.error("Error deleting course:", error))
         .finally(() => {
@@ -110,10 +108,10 @@ export default function Tablee() {
           setSelectedId(null);
         });
 
-        <ListCourses/>
+      <ListCourses />;
     }
   };
-  
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -125,26 +123,40 @@ export default function Tablee() {
             component="div"
             color="info"
           >
-            Courses 
+            Courses
           </Typography>
         </Toolbar>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} size={dense ? "small" : "medium"}>
             <TableHead>
-            <TableRow>
-  {headCells.map((headCell) => (
-    <TableCell
-      key={headCell.id}
-      align="left"
-      sx={{
-        ...(headCell.id === "course_image" && { display: { xs: "none", sm: "none", md: "table-cell", lg: "table-cell" } }),
-        ...(headCell.id === "course_description" && { display: { xs: "none", sm: "none", md: "none", lg: "table-cell" } }),
-      }}
-    >
-      {headCell.label}
-    </TableCell>
-  ))}
-</TableRow>
+              <TableRow>
+                {headCells.map((headCell) => (
+                  <TableCell
+                    key={headCell.id}
+                    align="left"
+                    sx={{
+                      ...(headCell.id === "course_image" && {
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "table-cell",
+                          lg: "table-cell",
+                        },
+                      }),
+                      ...(headCell.id === "course_description" && {
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "none",
+                          lg: "table-cell",
+                        },
+                      }),
+                    }}
+                  >
+                    {headCell.label}
+                  </TableCell>
+                ))}
+              </TableRow>
             </TableHead>
             <TableBody>
               {courses.length > 0 ? (
@@ -154,9 +166,17 @@ export default function Tablee() {
                     <TableRow key={course.id}>
                       <TableCell align="left">{course.id}</TableCell>
                       <TableCell>{course.course_name}</TableCell>
-                      <TableCell align="left"
-                       sx={{ display: { xs: "none", sm: "none", md: "none", lg: "table-cell" } }}
->
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "none",
+                            lg: "table-cell",
+                          },
+                        }}
+                      >
                         <img
                           src={course.course_image}
                           alt={course.course_name}
@@ -166,9 +186,16 @@ export default function Tablee() {
                       <TableCell align="left">{course.price}</TableCell>
                       <TableCell align="left">{course.Insttrctor}</TableCell>
 
-                      <TableCell 
-                        align="left" 
-                        sx={{ display: { xs: "none", sm: "none", md: "none", lg: "table-cell" } }}
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: {
+                            xs: "none",
+                            sm: "none",
+                            md: "none",
+                            lg: "table-cell",
+                          },
+                        }}
                       >
                         {course.course_description}
                       </TableCell>
@@ -190,11 +217,10 @@ export default function Tablee() {
                           startIcon={<UpdateIcon />}
                           sx={{ m: 1 }}
                           component={Link}
-                          to={`/E-Learning/dashboard/courses/updatecourses/${course.id}`}
- 
+                          to={`/E-Learning/admin/updatecourses/${course.id}`}
                         >
-                        Update
-                       </Button>
+                          Update
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))
@@ -241,7 +267,6 @@ export default function Tablee() {
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <Snackbar
         open={snackbarOpen}
