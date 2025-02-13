@@ -27,6 +27,8 @@ function Login() {
 
   const [loginError, setLoginError] = useState(null);
 
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
   const handleChange = (name, value, isError) => {
     switch (name) {
       case "email":
@@ -54,19 +56,29 @@ function Login() {
     // }
   };
 
-  const loginByEmail = (email) => {
+  const loginByEmail = (email, pass) => {
     const usersData = JSON.parse(localStorage.getItem("users")) || {};
     for (const key in usersData) {
-      if (usersData[key].email == email) {
-        if (usersData[key].password == pass) {
+      if (usersData[key].email === email) {
+        if (usersData[key].password === pass) {
           dispatch(login(usersData[key]));
-          return true;
+          setLoggedInUser(usersData[key]);
+          return {
+            user: usersData[key],
+            isFound: true,
+          };
         } else {
-          return false;
+          return {
+            user: null,
+            isFound: false,
+          };
         }
       }
     }
-    return false;
+    return {
+      user: null,
+      isFound: false,
+    };
   };
 
   const loginByUname = (uname) => {
@@ -74,13 +86,23 @@ function Login() {
     if (usersData[uname]) {
       if (usersData[uname].password == pass) {
         dispatch(login(usersData[uname]));
-        return true;
+        setLoggedInUser(usersData[uname]);
+        return {
+          user: usersData[uname],
+          isFound: true,
+        };
       } else {
-        return false;
+        return {
+          user: null,
+          isFound: false,
+        };
       }
     }
 
-    return false;
+    return {
+      user: null,
+      isFound: false,
+    };
   };
 
   const handleSubmit = (e) => {
@@ -92,10 +114,23 @@ function Login() {
     if ((email, pass)) {
       console.log("Email", loginByEmail(email));
       console.log("uname", loginByUname(email));
-      if (loginByUname(email) || loginByEmail(email)) {
+      let loggedInByUname = loginByUname(email);
+      let loggedInByEmail = loginByEmail(email);
+      if (loggedInByUname.isFound || loggedInByEmail.isFound) {
         setLoginError(false);
-
-      history.push("/E-Learning");
+        if (loggedInByUname.isFound) {
+          if (loggedInByUname.user.role === "admin") {
+            history.push("/E-Learning/admin/listcourses");
+          } else {
+            history.push("/E-Learning");
+          }
+        } else {
+          if (loggedInByUname.user.role === "admin") {
+            history.push("/E-Learning/admin/listcourses");
+          } else {
+            history.push("/E-Learning");
+          }
+        }
       } else {
         setLoginError(true);
       }
