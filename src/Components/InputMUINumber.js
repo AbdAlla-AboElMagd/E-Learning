@@ -24,9 +24,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom/cjs/react-router-dom.min";
 import { Link as muiLink } from "@mui/material/Link";
 
-function InputMUIText(props) {
+function InputMUINumber(props) {
   const [item, setItem] = useState(props.value || "");
-  console.log("Valueeeeeeeeeeeeee", props.value);
   const [itemError, setItemError] = useState(false);
   const [itemBlurError, setItemBlurError] = useState(false);
 
@@ -69,7 +68,7 @@ function InputMUIText(props) {
         name={props.name}
         // value={item}
         value={item ? item : props.value ? props.value : ""}
-        type="text"
+        type="number"
         onChange={(e) => handleChange(e, props.reg)}
         onBlur={(e) => handleBlur(e, props.reg)}
         aria-describedby="item-helper-text"
@@ -90,4 +89,4 @@ function InputMUIText(props) {
     </FormControl>
   );
 }
-export default InputMUIText;
+export default InputMUINumber;

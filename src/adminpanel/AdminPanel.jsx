@@ -96,6 +96,17 @@ export default function PersistentDrawerLeft() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const user = useSelector((state) => state.auth.user);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      history.push("/E-Learning/unauthorized");
+    } else {
+      if (user.role != "admin") {
+        history.push("/E-Learning/unauthorized");
+      }
+    }
+  }, []);
   const handleLogout = () => {
     dispatch(Reset());
     dispatch(logout());
