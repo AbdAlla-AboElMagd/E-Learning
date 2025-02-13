@@ -4,14 +4,38 @@ import axios from "axios";
 import {
   Card,
   CardContent,
-  Typography,
+//   Typography,
   Avatar,
-  Box,
+//   Box,
   Grid,
   CircularProgress,
   Container,
-  Button,
+//   Button,
 } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Toolbar,
+  Typography,
+  Paper,
+  FormControlLabel,
+  Switch,
+  Button,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+
 import SchoolIcon from "@mui/icons-material/School";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
@@ -22,6 +46,9 @@ const UserProfile = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userCourse, setUserCourse] = useState(true);
+  const [open, setOpen] =useState(false);
+    const [selectedId, setSelectedId] =useState(null);
+    const [snackbarOpen, setSnackbarOpen] =useState(false);
 
   const API_URL = "https://retoolapi.dev/3apaeZ/data";
 
@@ -84,16 +111,34 @@ const UserProfile = () => {
 
   const handleUnjoin = async (courseId) => {
     try {
+      courseId=selectedId
       await deleteData(courseId);
+      
       setCourses((prevCourses) =>
         prevCourses.filter((course) => course.id !== courseId)
       );
+      setSnackbarOpen(true);
     } catch (error) {
       console.error("Error unjoining course:", error);
+
+    }
+    finally{
+      setOpen(false);
+
     }
   };
+  const handleOpen = (id) => {
+    setSelectedId(id);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedId(null);
+  };
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
   return (
+    <>
     <Container sx={{ mt: 5 }}>
       <Card
         sx={{
@@ -162,7 +207,7 @@ const UserProfile = () => {
                           color="error"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleUnjoin(course.id);
+                            handleOpen(course.id);
                           }}
                           sx={{ m: 1 }}
                         >
@@ -180,6 +225,29 @@ const UserProfile = () => {
         </CardContent>
       </Card>
     </Container>
+
+<Dialog open={open} onClose={handleClose}>
+<DialogTitle>Confirm Deletion</DialogTitle>
+<DialogContent>
+  <DialogContentText>
+    Are you sure you want to unjoin this course? This action cannot be undone.
+  </DialogContentText>
+</DialogContent>
+<DialogActions>
+  <Button onClick={handleClose} color="primary">
+    Cancel
+  </Button>
+  <Button onClick={handleUnjoin} color="error" autoFocus>
+    Unjoin
+  </Button>
+</DialogActions>
+</Dialog>
+   <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
+          Course Unjoined successfully!
+        </Alert>
+      </Snackbar>
+</>
   );
 };
 

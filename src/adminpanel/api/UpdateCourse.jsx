@@ -170,7 +170,7 @@ const EditCourse = () => {
       .then(() => {
         setSuccessMessage("Course updated successfully!");
         setOpenSnackbar(true);
-        setTimeout(() => history.push("/E-Learning/dashboard/courses/listcourses"), 1000);
+        setTimeout(() => history.push("/E-Learning/admin/listcourses"), 1000);
       })
       .catch(() => {
         setErrorMessage("Error updating course");
