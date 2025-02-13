@@ -85,6 +85,12 @@ function CoursesList() {
           <Skeleton variant="rectangular" width={"25%"} height={250} />
           <Skeleton variant="rectangular" width={"25%"} height={250} />
           <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
+          <Skeleton variant="rectangular" width={"25%"} height={250} />
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap" justifyContent="center" gap={3}>

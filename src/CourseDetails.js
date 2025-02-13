@@ -97,7 +97,6 @@ function CourseDetails() {
       <>
         <Container>
           <Box m={3}>
-            <Typography>Loading...</Typography>);
             <Box
               display="flex"
               flexWrap="wrap"
@@ -105,14 +104,9 @@ function CourseDetails() {
               gap={3}
               width={"90"}
             >
-              <Skeleton
-                variant="rectangular"
-                width={"90%"}
-                height={100}
-                sx={{ m: 1 }}
-              />
+              <Skeleton variant="rectangular" width={"90%"} height={100} />
               <Skeleton variant="rectangular" width={"20%"} height={250} />
-              <Skeleton variant="rectangular" width={"70%"} height={250} />
+              <Skeleton variant="rectangular" width={"67%"} height={250} />
               <Skeleton
                 variant="rectangular"
                 width={"90%"}
