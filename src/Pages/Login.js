@@ -223,7 +223,14 @@ function Login() {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  disabled={emailError || passError}
+                  disabled={
+                    emailError ||
+                    passError ||
+                    !email ||
+                    !pass ||
+                    email == "" ||
+                    pass == ""
+                  }
                   loading={btnLoading ? true : false}
                 >
                   Login

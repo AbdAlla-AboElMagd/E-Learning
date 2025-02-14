@@ -153,7 +153,6 @@ function Register() {
   };
 
   const handleBlur = (name, value) => {
-    console.log("SIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
     console.log(name);
     console.log(value);
     return handleUniqness(name, value);
